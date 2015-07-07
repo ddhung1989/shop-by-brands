@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<layout>
+	<!-- Here, we reference the XML node path of our route -->
+	<adminhtml_brand_index>
+		<reference name="content">
+			<!-- We also reference our block by namespace_modulename/adminhtml_controllername, and name it uniquely -->
+			<block type="extension_shopbybrand/adminhtml_brand" name="extension_shopbybrand_brand" />
+		</reference>
+	</adminhtml_brand_index>
+</layout>

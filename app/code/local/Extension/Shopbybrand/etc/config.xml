@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Extension_Shopbybrand>
+			<version>0.0.1</version>
+		</Extension_Shopbybrand>
+	</modules>
+	
+	<global>
+		<helpers>
+			<extension_shopbybrand>
+				<!-- This is where we define our helper directory -->
+				<class>Extension_Shopbybrand_Helper</class>
+			</extension_shopbybrand>
+		</helpers>
+		
+		<blocks>
+			<extension_shopbybrand>
+				<!-- Set a block definition and lookup directory -->
+				<class>Extension_Shopbybrand_Block</class>
+			</extension_shopbybrand>
+		</blocks>
+		
+		<models>
+			<extension_shopbybrand>
+				<!-- This is where we define our model directory -->
+				<class>Extension_Shopbybrand_Model</class>
+				<!-- Define a resource to create a custom table -->
+				<resourceModel>extension_shopbybrand_mysql4</resourceModel>
+			</extension_shopbybrand>
+			
+			<!-- Here's our resource model we'll use to create a database table -->
+			<extension_shopbybrand_mysql4>
+				<class>Extension_Shopbybrand_Model_Mysql4</class>
+				<entities>
+					<!-- Let's define our table, we'll call it with the brand name, but the real table is extension_shopbybrand_brand -->
+					<!-- After we define our entity, we can call it with our model by calling extension_shopbybrand/brand -->
+					<brand>
+						<table>extension_shopbybrand</table>
+					</brand>
+				</entities>
+			</extension_shopbybrand_mysql4>
+		</models>
+		
+		<!-- And finally we define our resource setup script -->
+		<resources>
+			<extension_shopbybrand_setup>
+				<setup>
+					<module>Extension_Shopbybrand</module>
+				</setup>
+			</extension_shopbybrand_setup>
+		</resources>
+	</global>
+	
+	<admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<!-- This is how we load our Adminhtml controllers -->
+					<modules>
+						<Extension_Shopbybrand before="Mage_Adminhtml">Extension_Shopbybrand_Adminhtml</Extension_Shopbybrand>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
+	
+	<adminhtml>
+		<layout>
+			<updates>
+				<extension_shopbybrand>
+					<!--
+					We again keep a nice naming convention and make our module upgrade proof by placing it in a seperate folder
+					- Since we are in the adminhtml node, this will look for the XML file in the app/design/adminhtml/default/default root folder
+					-->
+					<file>extension/shopbybrand.xml</file>
+				</extension_shopbybrand>
+			</updates>
+		</layout>
+	</adminhtml>
+</config>
