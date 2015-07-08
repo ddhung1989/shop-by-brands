@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<config>
-	<modules>
-		<Extension_Shopbybrand>
-			<active>true</active>
-			<codePool>local</codePool>
-		</Extension_Shopbybrand>
-	</modules>
-</config>

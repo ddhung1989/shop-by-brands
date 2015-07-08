@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Bluecom_Shopbybrand>
+			<version>0.0.1</version>
+		</Bluecom_Shopbybrand>
+	</modules>
+	
+	<global>
+		<helpers>
+			<bluecom_shopbybrand>
+				<!-- This is where we define our helper directory -->
+				<class>Bluecom_Shopbybrand_Helper</class>
+			</bluecom_shopbybrand>
+		</helpers>
+		
+		<blocks>
+			<bluecom_shopbybrand>
+				<!-- Set a block definition and lookup directory -->
+				<class>Bluecom_Shopbybrand_Block</class>
+			</bluecom_shopbybrand>
+		</blocks>
+		
+		<models>
+			<bluecom_shopbybrand>
+				<!-- This is where we define our model directory -->
+				<class>Bluecom_Shopbybrand_Model</class>
+				<!-- Define a resource to create a custom table -->
+				<resourceModel>bluecom_shopbybrand_mysql4</resourceModel>
+			</bluecom_shopbybrand>
+			
+			<!-- Here's our resource model we'll use to create a database table -->
+			<bluecom_shopbybrand_mysql4>
+				<class>Bluecom_Shopbybrand_Model_Mysql4</class>
+				<entities>
+					<!-- Let's define our table, we'll call it with the brand name, but the real table is bluecom_shopbybrand_brand -->
+					<!-- After we define our entity, we can call it with our model by calling bluecom_shopbybrand/brand -->
+					<brand>
+						<table>bluecom_shopbybrand</table>
+					</brand>
+				</entities>
+			</bluecom_shopbybrand_mysql4>
+		</models>
+		
+		<!-- And finally we define our resource setup script -->
+		<resources>
+			<bluecom_shopbybrand_setup>
+				<setup>
+					<module>Bluecom_Shopbybrand</module>
+				</setup>
+			</bluecom_shopbybrand_setup>
+		</resources>
+	</global>
+	
+	<admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<!-- This is how we load our Adminhtml controllers -->
+					<modules>
+						<Bluecom_Shopbybrand before="Mage_Adminhtml">Bluecom_Shopbybrand_Adminhtml</Bluecom_Shopbybrand>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
+	
+	<adminhtml>
+		<layout>
+			<updates>
+				<bluecom_shopbybrand>
+					<!--
+					We again keep a nice naming convention and make our module upgrade proof by placing it in a seperate folder
+					- Since we are in the adminhtml node, this will look for the XML file in the app/design/adminhtml/default/default root folder
+					-->
+					<file>bluecom/shopbybrand.xml</file>
+				</bluecom_shopbybrand>
+			</updates>
+		</layout>
+	</adminhtml>
+</config>

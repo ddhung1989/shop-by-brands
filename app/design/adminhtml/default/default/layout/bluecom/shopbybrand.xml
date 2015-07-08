@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<layout>
+	<!-- Here, we reference the XML node path of our route -->
+	<adminhtml_brand_index>
+		<reference name="content">
+			<block type="adminhtml/store_switcher" name="store_switcher" as="store_switcher">
+                <action method="setUseConfirm">
+                    <params>0</params>
+                </action>
+            </block>
+			<!-- We also reference our block by namespace_modulename/adminhtml_controllername, and name it uniquely -->
+			<block type="bluecom_shopbybrand/adminhtml_brand" name="bluecom_shopbybrand_brand" />
+		</reference>
+	</adminhtml_brand_index>
+	
+	<adminhtml_brand_edit>
+		<block name="left">
+			<block type="adminhtml/store_switcher" name="store_switcher" as="store_switcher">
+                <action method="setUseConfirm">
+                    <params>0</params>
+                </action>
+            </block>
+		</block>
+	</adminhtml_brand_edit>
+	
+	<adminhtml_brand_image>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="bluecom_shopbybrand/adminhtml_brand_edit_tab_images" name="shopbybrand.block.adminhtml.brand.edit.tab.images"/>
+        </block>
+    </adminhtml_brand_image>
+	
+	<adminhtml_brand_product>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="bluecom_shopbybrand/adminhtml_brand_edit_tab_products" name="shopbybrand.block.adminhtml.brand.edit.tab.products"/>
+            <block type="adminhtml/widget_grid_serializer" name="related_grid_serializer">
+                <reference name="related_grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>shopbybrand.block.adminhtml.brand.edit.tab.products</grid_block_name>
+                        <data_callback>getSelectedProducts</data_callback>
+                        <hidden_input_name>sproducts</hidden_input_name>
+                        <reload_param_name>brand_products</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>position</input_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_brand_product>
+    
+	<adminhtml_brand_productgrid>
+        <block type="core/text_list" name="root" output="toHtml">
+			<block type="bluecom_shopbybrand/adminhtml_brand_edit_tab_products" name="shopbybrand.block.adminhtml.brand.edit.tab.products"/>
+        </block>
+    </adminhtml_brand_productgrid>
+</layout>

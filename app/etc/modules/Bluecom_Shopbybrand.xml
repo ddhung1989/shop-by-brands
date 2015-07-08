@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Bluecom_Shopbybrand>
+			<active>true</active>
+			<codePool>local</codePool>
+		</Bluecom_Shopbybrand>
+	</modules>
+</config>
