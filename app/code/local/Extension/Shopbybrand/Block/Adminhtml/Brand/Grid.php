@@ -4,7 +4,7 @@ class Extension_Shopbybrand_Block_Adminhtml_Brand_Grid extends Mage_Adminhtml_Bl
 		parent::__construct();
 		
 		// Set some defaults for our grid
-		$this->setDefaultSort('id');
+		$this->setDefaultSort('brand_id');
 		$this->setId('extension_shopbybrand_brand_grid');
 		$this->setDefaultDir('asc');
 		$this->setSaveParametersInSession(true);
@@ -25,21 +25,57 @@ class Extension_Shopbybrand_Block_Adminhtml_Brand_Grid extends Mage_Adminhtml_Bl
 	
 	protected function _prepareColumns() {
 		// Add the columns that should appear in the grid
-		$this->addColumn('id',
-			array(
-				'header' => $this->__('ID'),
-				'align'  => 'right',
-				'width'  => '50px',
-				'index'  => 'id'
-			)
-		);
-		
-		$this->addColumn('name',
-			array(
-				'header' => $this->__('Name'),
-				'index'  => 'name'
-			)
-		);
+		$this->addColumn('brand_id', array(
+            'header'    => Mage::helper('extension_shopbybrand')->__('ID'),
+            'align'     =>'right',
+            'width'     => '50px',
+            'index'     => 'brand_id',
+            'filter_index'=>'main_table.brand_id'
+        ));
+
+        $this->addColumn('name', array(
+            'header'    => Mage::helper('extension_shopbybrand')->__('Name'),
+            'align'     =>'left',
+            'index'     => 'name',
+        ));
+        
+        $this->addColumn('image', array(
+            'header'    => Mage::helper('extension_shopbybrand')->__('Image'),
+            'width'     => '150px',
+            'index'     => 'image',
+            'filter'    => false,
+            'sortable'  => false,
+            'renderer'  => 'extension_shopbybrand/adminhtml_brand_renderer_image'
+        ));
+
+        $this->addColumn('status', array(
+            'header'    => Mage::helper('extension_shopbybrand')->__('Status'),
+            'align'     => 'left',
+            'width'     => '80px',
+            'index'     => 'status',
+            'type'      => 'options',
+            'options'   => array(
+                1 => 'Enabled',
+                2 => 'Disabled',
+            ),
+        ));
+
+        $this->addColumn('action', array(
+            'header'    =>    Mage::helper('extension_shopbybrand')->__('Action'),
+            'width'     => '100',
+            'type'      => 'action',
+            'getter'    => 'getId',
+            'actions'   => array(
+                array(
+                    'caption'    => Mage::helper('extension_shopbybrand')->__('Edit'),
+                    'url'        => array('base'=> '*/*/edit/store/'.$this->getRequest()->getParam('store')),
+                    'field'      => 'id'
+                )),
+            'filter'    => false,
+            'sortable'  => false,
+            'index'     => 'stores',
+            'is_system' => true,
+        ));
 		
 		return parent::_prepareColumns();
 	}

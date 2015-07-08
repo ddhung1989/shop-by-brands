@@ -11,6 +11,18 @@ class Extension_Shopbybrand_Block_Adminhtml_Brand_Edit extends Mage_Adminhtml_Bl
 		
 		$this->_updateButton('save', 'label', $this->__('Save Brand'));
 		$this->_updateButton('delete', 'label', $this->__('Delete Brand'));
+		
+		$this->_addButton('saveandcontinue', array(
+            'label'        => Mage::helper('adminhtml')->__('Save And Continue Edit'),
+            'onclick'    => 'saveAndContinueEdit()',
+            'class'        => 'save',
+        ), -100);
+		
+		$this->_formScripts[] = "
+            function saveAndContinueEdit(){
+                editForm.submit($('edit_form').action + 'back/edit/');
+            }
+        ";
 	}
 	
 	/**
