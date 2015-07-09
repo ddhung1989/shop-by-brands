@@ -8,12 +8,12 @@ class Bluecom_Shopbybrand_Adminhtml_BrandController extends Mage_Adminhtml_Contr
 	 * @return Mage_Adminhtml_Controller_Action
 	 */
 	protected function _initAction() {
-		$this->loadLayout()
+		$this->loadLayout();
 			// Make the active menu match the menu config nodes (without 'children' in-between)
-			->_setActiveMenu('catalog/bluecom_shopbybrand_brand')
-			->_title($this->__('Catalog'))->_title($this->__('Brand'))
-			->_addBreadcrumb($this->__('Catalog'), $this->__('Catalog'))
-			->_addBreadcrumb($this->__('Brand'), $this->__('Brand'));
+			$this->_setActiveMenu('catalog/bluecom_shopbybrand_brand');
+			$this->_title($this->__('Catalog'))->_title($this->__('Brand'));
+			$this->_addBreadcrumb($this->__('Catalog'), $this->__('Catalog'));
+			$this->_addBreadcrumb($this->__('Brand'), $this->__('Brand'));
 			
 		return $this;
 	}
@@ -70,11 +70,11 @@ class Bluecom_Shopbybrand_Adminhtml_BrandController extends Mage_Adminhtml_Contr
 		if ($postData = $this->getRequest()->getPost()) {
 			$store = $this->getRequest()->getParam('store', 0);
 			
-			// Process post data before doing anything else
+			/* Process post data before doing anything else */
 			// Icon
 			if (isset($postData['icon']['delete'])) {
                 Mage::helper('bluecom_shopbybrand')->deleteIconFile($postData['name'], $postData['old_icon']);
-                unset($postData['icon']);
+                unset($postData['old_icon']);
             }
             $postData['icon'] = "";
 
@@ -110,7 +110,7 @@ class Bluecom_Shopbybrand_Adminhtml_BrandController extends Mage_Adminhtml_Contr
                 }
             }
 			
-			// Start saving model
+			/* Start saving model */
 			$model = Mage::getModel('bluecom_shopbybrand/brand');
 			$model->load($this->getRequest()->getParam('id'))
 				  ->addData($postData);
@@ -144,27 +144,57 @@ class Bluecom_Shopbybrand_Adminhtml_BrandController extends Mage_Adminhtml_Contr
 					}
                 }
 				
-                if ($icon != $model->getIcon() || $image != $model->getImage()) {
-                    $model->setIcon($icon);
-					$model->setImage($image);
-                    $model->save();
-                }
+				// Update brand into attribute
+				$optionId = Mage::getResourceModel('bluecom_shopbybrand/brand')->addOption($model);
+				if ($optionId) {
+					$model->setOptionId($optionId)->save();
+				}
 				
-				// Need to update product's attribute manufacturer here
+				// Update attribute into products
+				if (count($productIds)) {
+					Mage::helper('bluecom_shopbybrand')->updateProductsBrand($productIds, $model->getId(), $store);
+				}
 				
 				Mage::getSingleton('adminhtml/session')->addSuccess($this->__('Brand has been saved.'));
-				$this->_redirect('*/*/');
 				
+				// Save and continue edit
+				if ($this->getRequest()->getParam('back')) {
+                    $this->_redirect('*/*/edit', array('id' => $model->getId(), 'store' => $store));
+                    return;
+                }
+				
+				$this->_redirect('*/*/');
 				return;
-			} catch (Mage_Core_Exception $e) {
-				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 			} catch (Exception $e) {
 				Mage::getSingleton('adminhtml/session')->addError($this->__('An error occurred while saving this brand.'));
+				
+				$this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
+                return;
 			}
 			
 			Mage::getSingleton('adminhtml/session')->setBrandData($postData);
-			$this->_redirectReferer();
+			$this->_redirect('*/*/');
 		}
+	}
+	
+	public function deleteAction() {
+		$id = $this->getRequest()->getParam('id');
+		if ($id > 0) {
+			try {
+				$model = Mage::getModel('bluecom_shopbybrand/brand')->load($id);
+				Mage::getResourceModel('bluecom_shopbybrand/brand')->removeOption($model);
+				$model->delete();
+				
+				Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Brand has been deleted.'));
+				
+				$this->_redirect('*/*/');
+			} catch (Exception $e) {
+				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+				$this->_redirect('*/*/edit', array('id'	=> $id));
+			}
+		}
+		
+		$this->_redirect('*/*/');
 	}
 	
 	/**
@@ -179,12 +209,6 @@ class Bluecom_Shopbybrand_Adminhtml_BrandController extends Mage_Adminhtml_Contr
 	/**
 	 * Actions for tabs
 	 */
-	public function imageAction() {
-		$this->loadLayout();
-		$this->getLayout()->getBlock('shopbybrand.block.adminhtml.brand.edit.tab.images');
-        $this->renderLayout();
-	}
-	
 	public function productAction() {
 		$this->loadLayout();
 		$this->getLayout()->getBlock('shopbybrand.block.adminhtml.brand.edit.tab.products')

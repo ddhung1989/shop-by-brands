@@ -15,17 +15,19 @@ class Bluecom_Shopbybrand_Block_Adminhtml_Brand_Edit_Tabs extends Mage_Adminhtml
      */
     protected function _beforeToHtml() {
         $this->addTab('form_section', array(
-            'label' => Mage::helper('bluecom_shopbybrand')->__('General Information'),
-            'title' => Mage::helper('bluecom_shopbybrand')->__('General Information'),
-            'content' => $this->getLayout()
-                    ->createBlock('bluecom_shopbybrand/adminhtml_brand_edit_tab_form')
-                    ->toHtml(),
+            'label' 	=> Mage::helper('bluecom_shopbybrand')->__('General Information'),
+            'title' 	=> Mage::helper('bluecom_shopbybrand')->__('General Information'),
+            'content' 	=> $this->getLayout()
+							->createBlock('bluecom_shopbybrand/adminhtml_brand_edit_tab_form')
+							->toHtml(),
         ));
 
         $this->addTab('image', array(
-            'label' => Mage::helper('bluecom_shopbybrand')->__('Images'),
-            'url' => $this->getUrl('*/*/image', array('_current' => true)),
-            'class' => 'ajax',
+            'label' 	=> Mage::helper('bluecom_shopbybrand')->__('Images'),
+            'title'		=> Mage::helper('bluecom_shopbybrand')->__('Images'),
+			'content'	=> $this->getLayout()
+							->createBlock('bluecom_shopbybrand/adminhtml_brand_edit_tab_images')
+							->toHtml(),
         ));
         
 		$this->addTab('product', array(

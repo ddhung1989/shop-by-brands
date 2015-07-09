@@ -1,7 +1,7 @@
 <?php
 class Bluecom_Shopbybrand_Helper_Data extends Mage_Core_Helper_Abstract {
 	public function getUrlImagePath($brandId) {
-        $brandImagePathUrl = Mage::getBaseUrl('media') . 'brands/cache/' . $brandId;
+        $brandImagePathUrl = Mage::getBaseUrl('media') . 'brands/image/' . $brandId;
         return $brandImagePathUrl;
     }
 
@@ -180,4 +180,55 @@ class Bluecom_Shopbybrand_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         return $imageName;
     }
+	
+	public function deleteIconFile($brandName, $icon) {
+        if (!$icon) {
+            return;
+        }
+
+        $brandIconPath = $this->getIconPath($brandName) . DS . $icon;
+        if (file_exists($brandIconPath)) {
+            try {
+                unlink($brandIconPath);
+            } catch (Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($this->getErrorMessage() . $e->getMessage());
+            }
+        }
+    }
+	
+	public function deleteImageFile($brandName, $image) {
+        if (!$image) {
+            return;
+        }
+		
+        $brandImagePath = $this->getImagePath($brandName) . DS . $image;
+
+        if (file_exists($brandImagePath)) {
+            try {
+                unlink($brandImagePath);
+            } catch (Exception $e) {
+                Mage::getSingleton('adminhtml/session')->addError($this->getErrorMessage() . $e->getMessage());
+            }
+        }
+    }
+	
+	public function updateProductsBrand($productIds, $brandId, $storeId) {
+		$brand = Mage::getModel('bluecom_shopbybrand/brand')->setStoreid($storeId)->load($brandId);
+		$oldProductIds = $brand->getProductIds();
+		$attributeCode = Mage::helper('bluecom_shopbybrand/brand')->getAttributeCode();
+		
+		// Update products brand to null in case removing products from this brand
+		$oldAttributeData = array (
+			$attributeCode	=> null
+		);
+		Mage::getSingleton('catalog/product_action')
+				->updateAttributes(array_diff($oldProductIds, $productIds), $oldAttributeData, $storeId);
+				
+		// Update products brand to brand's name in case adding products to this brand
+		$newAttributeData = array (
+			$attributeCode	=> $brand->getOptionId()
+		);
+		Mage::getSingleton('catalog/product_action')
+				->updateAttributes(array_diff($productIds, $oldProductIds), $newAttributeData, $storeId);
+	}
 }

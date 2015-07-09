@@ -25,8 +25,10 @@ class Bluecom_Shopbybrand_Block_Adminhtml_Brand_Edit_Tab_Form extends Mage_Admin
             $data = Mage::registry('brand_data')->getData();
         }
         
-        if (isset($data)) $dataObj->addData($data);
-            $data = $dataObj->getData();
+        if (isset($data)) {
+			$dataObj->addData($data);
+		}
+        $data = $dataObj->getData();
         
         $storeId = $this->getRequest()->getParam('store');
         if($storeId)
@@ -88,7 +90,7 @@ class Bluecom_Shopbybrand_Block_Adminhtml_Brand_Edit_Tab_Form extends Mage_Admin
 			['.$scopeLabel.']',
         ));
 
-        $form->setValues($data);
+        $form->setValues($data); Mage::getSingleton('adminhtml/session')->setBrandImagesData($data);
         return parent::_prepareForm();
     }
 }

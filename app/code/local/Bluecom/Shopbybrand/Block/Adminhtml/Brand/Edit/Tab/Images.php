@@ -17,31 +17,21 @@ class Bluecom_Shopbybrand_Block_Adminhtml_Brand_Edit_Tab_Images extends Mage_Adm
             'image_in_store' =>  '',
         ));
         
-        if (Mage::getSingleton('adminhtml/session')->getBrandData()) {
-            $data = Mage::getSingleton('adminhtml/session')->getBrandData();
-            Mage::getSingleton('adminhtml/session')->setBrandData(null);
-        } elseif (Mage::registry('brand_data')) {
-            $data = Mage::registry('brand_data')->getData();
+        if (Mage::getSingleton('adminhtml/session')->getBrandImagesData()) {
+            $data = Mage::getSingleton('adminhtml/session')->getBrandImagesData();
+            Mage::getSingleton('adminhtml/session')->setBrandImagesData(null); 
         }
         
-        if (isset($data)) $dataObj->addData($data);
-            $data = $dataObj->getData();
+        if (isset($data)) {
+			$dataObj->addData($data);
+		}
+        $data = $dataObj->getData();        
         
-        $storeId = $this->getRequest()->getParam('store');
-        if($storeId)
-            $store = Mage::getModel('core/store')->load($storeId);
-        else
-            $store = Mage::app()->getStore();
-        $inStore = $this->getRequest()->getParam('store');
-        $defaultLabel = Mage::helper('bluecom_shopbybrand')->__('Use Default');
-        $defaultTitle = Mage::helper('bluecom_shopbybrand')->__('-- Please Select --');
-        $scopeLabel = Mage::helper('bluecom_shopbybrand')->__('STORE VIEW');
-        
-        $fieldset = $form->addFieldset('shopbybrand_images', array(
+		$fieldset = $form->addFieldset('shopbybrand_images', array(
             'legend'=>Mage::helper('bluecom_shopbybrand')->__('Images')
         ));
         
-		if(isset($data['icon']) && $data['icon'])
+        if(isset($data['icon']) && $data['icon'])
         {
             $fieldset->addField('old_icon', 'hidden', array(
                 'label'     => Mage::helper('bluecom_shopbybrand')->__('Current Icon'),
@@ -52,7 +42,7 @@ class Bluecom_Shopbybrand_Block_Adminhtml_Brand_Edit_Tab_Images extends Mage_Adm
          }	
         $fieldset->addField('icon', 'image', array(
             'label'     =>  Mage::helper('bluecom_shopbybrand')->__('Upload Icon'),
-            'required'  =>  false,
+			'required'  =>  false,
             'name'      =>  'icon',
         ));
 		
@@ -67,20 +57,20 @@ class Bluecom_Shopbybrand_Block_Adminhtml_Brand_Edit_Tab_Images extends Mage_Adm
         }	
         $fieldset->addField('image', 'image', array(
             'label'     =>  Mage::helper('bluecom_shopbybrand')->__('Upload image'),
-            'required'  =>  false,
+			'required'  =>  false,
             'name'      =>  'image',            
         ));
         
         if(isset($data['icon']) && $data['icon'])
         {
             $data['old_icon'] =  $data['icon'];
-            $data['thumbnail_image'] =  Mage::helper('bluecom_shopbybrand')->getUrlIconPath($data['brand_id']) .'/'. $data['icon'];
+            $data['icon'] =  Mage::helper('bluecom_shopbybrand')->getUrlIconPath($data['brand_id']) . '/' . $data['icon'];
         }
 		
 		if(isset($data['image']) && $data['image'])
         {
             $data['old_image'] =  $data['image'];
-            $data['image'] =  Mage::helper('bluecom_shopbybrand')->getUrlImagePath($data['brand_id']) .'/'. $data['image'];
+            $data['image'] =  Mage::helper('bluecom_shopbybrand')->getUrlImagePath($data['brand_id']) . '/' . $data['image'];
         }
 
         $form->setValues($data);
