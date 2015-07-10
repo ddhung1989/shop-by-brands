@@ -67,7 +67,7 @@ class Bluecom_Shopbybrand_Model_Mysql4_Brand extends Mage_Core_Model_Mysql4_Abst
 			
 			$setup->addAttributeOption($option);
 			
-			// Get option idate
+			// Get option id
 			$select = $this->_getReadAdapter()->select()
 				->from(array('eao'	=> $prefix . 'eav_attribute_option'), array('option_id', 'eaov.value', 'eaov.store_id'))
 				->join(array('ea'	=> $prefix . 'eav_attribute'), 'eao.attribute_id = ea.attribute_id', array())
@@ -101,5 +101,21 @@ class Bluecom_Shopbybrand_Model_Mysql4_Brand extends Mage_Core_Model_Mysql4_Abst
 				Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
 			}
 		}
+	}
+	
+	public function getAttributeOptions($value) {
+		$prefix = (string)Mage::getConfig()->getTablePrefix();
+		$attributeCode = Mage::helper('bluecom_shopbybrand/brand')->getAttributeCode();
+		
+		$select = $this->_getReadAdapter()->select()
+			->from(array('eao' 	=> $prefix . 'eav_attribute_option'), array('option_id', 'eaov.value', 'eaov.store_id'))
+			->join(array('ea'	=> $prefix . 'eav_attribute'), 'eao.attribute_id = ea.attribute_id', array())
+			->join(array('eaov'	=> $prefix . 'eav_attribute_option_value'), 'eao.option_id = eaov.option_id', array())
+			->where('ea.attribute_code = ?', $attributeCode)
+			->where('eaov.value = ?', $value)
+		;
+		$option = $this->_getReadAdapter()->fetchAll($select);
+		
+		return $option;
 	}
 }

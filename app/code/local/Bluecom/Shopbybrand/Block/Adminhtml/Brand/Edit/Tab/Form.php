@@ -15,7 +15,7 @@ class Bluecom_Shopbybrand_Block_Adminhtml_Brand_Edit_Tab_Form extends Mage_Admin
             'store_id' => '',
             'name_in_store' => '',
             'description_in_store' =>  '',
-            'status_in_store_in_store' => ''
+            'status_in_store' => ''
         ));
         
         if (Mage::getSingleton('adminhtml/session')->getBrandData()) {
@@ -90,7 +90,8 @@ class Bluecom_Shopbybrand_Block_Adminhtml_Brand_Edit_Tab_Form extends Mage_Admin
 			['.$scopeLabel.']',
         ));
 
-        $form->setValues($data); Mage::getSingleton('adminhtml/session')->setBrandImagesData($data);
+        $form->setValues($data); 
+		Mage::getSingleton('adminhtml/session')->setBrandImagesData($data); // Why this works?
         return parent::_prepareForm();
     }
 }

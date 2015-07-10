@@ -36,8 +36,12 @@
 					<!-- Let's define our table, we'll call it with the brand name, but the real table is bluecom_shopbybrand_brand -->
 					<!-- After we define our entity, we can call it with our model by calling bluecom_shopbybrand/brand -->
 					<brand>
-						<table>bluecom_shopbybrand</table>
+						<table>bluecom_shopbybrand_brand</table>
 					</brand>
+					<!-- We can call this by calling bluecom_shopbybrand/brandvalue -->
+					<brandvalue>
+						<table>bluecom_shopbybrand_brand_store_value</table>
+					</brandvalue>
 				</entities>
 			</bluecom_shopbybrand_mysql4>
 		</models>
@@ -77,5 +81,17 @@
 				</bluecom_shopbybrand>
 			</updates>
 		</layout>
+		
+		<events>
+			<catalog_entity_attribute_save_after>
+				<observers>
+					<bluecom_shopbybrand_observers_update_brand>
+						<type>model</type>
+						<class>Bluecom_Shopbybrand_Model_Observer</class>
+						<method>updateBrand</method>
+					</bluecom_shopbybrand_observers_update_brand>
+				</observers>
+			</catalog_entity_attribute_save_after>
+		</events>
 	</adminhtml>
 </config>

@@ -58,6 +58,7 @@ class Bluecom_Shopbybrand_Adminhtml_BrandController extends Mage_Adminhtml_Contr
 		}
 		
 		Mage::register('brand_data', $model);
+		//Mage::register('brand_images_data', $model); Why this not works?
 		
 		$this->_initAction();
 		$this->_addBreadcrumb($id ? $this->__('Edit Brand') : $this->__('New Brand'), $id ? $this->__('Edit Brand') : $this->__('New Brand'));
@@ -145,7 +146,7 @@ class Bluecom_Shopbybrand_Adminhtml_BrandController extends Mage_Adminhtml_Contr
                 }
 				
 				// Update brand into attribute
-				$optionId = Mage::getResourceModel('bluecom_shopbybrand/brand')->addOption($model);
+				$optionId = Mage::getResourceModel('bluecom_shopbybrand/brand')->addOption($model->load($model->getId()));
 				if ($optionId) {
 					$model->setOptionId($optionId)->save();
 				}
