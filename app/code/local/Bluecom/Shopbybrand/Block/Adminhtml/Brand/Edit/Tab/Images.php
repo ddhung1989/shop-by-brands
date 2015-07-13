@@ -42,7 +42,7 @@ class Bluecom_Shopbybrand_Block_Adminhtml_Brand_Edit_Tab_Images extends Mage_Adm
          }	
         $fieldset->addField('icon', 'image', array(
             'label'     =>  Mage::helper('bluecom_shopbybrand')->__('Upload Icon'),
-			'required'  =>  false,
+			'required'  =>  true, // This attribute to show "*" only. True validation on app/code/local/Bluecom/Shopbybrand/Block/Adminhtml/Brand/Edit.php
             'name'      =>  'icon',
         ));
 		
@@ -57,7 +57,7 @@ class Bluecom_Shopbybrand_Block_Adminhtml_Brand_Edit_Tab_Images extends Mage_Adm
         }	
         $fieldset->addField('image', 'image', array(
             'label'     =>  Mage::helper('bluecom_shopbybrand')->__('Upload image'),
-			'required'  =>  false,
+			'required'  =>  true, // This attribute to show "*" only. True validation on app/code/local/Bluecom/Shopbybrand/Block/Adminhtml/Brand/Edit.php
             'name'      =>  'image',            
         ));
         

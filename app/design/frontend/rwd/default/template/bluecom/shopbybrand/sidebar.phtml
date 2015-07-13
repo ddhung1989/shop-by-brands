@@ -1,0 +1,26 @@
+<?php
+	$brandCollection = $this->getBrands();
+	
+?>
+<div class="block shopbybrand_sidebar">
+	<div class="block-title">
+        <strong><span><?php echo $this->__('Shop by Brands') ?></span></strong>
+	</div>
+    <div class="block-content">
+        <ul>
+            <?php
+                if ($brandCollection->getSize()) {
+                    foreach ($brandCollection as $brand) {
+						$url = Mage::getUrl('bluecom_shopbybrand/index/view', array('id'	=> $brand->getId()));
+						$path = Mage::helper('bluecom_shopbybrand')->getUrlIconPath($brand->getId());
+						$img = $path . '/' . $brand->getIcon();
+						echo("<li class='diplayimage'><a href='" . $url . "'>" . "<div class='brand-logo'> <img src='$img' /> </div>" . $brand->getName() . "</a></li>");
+					}
+                }
+            ?>
+		</ul>
+		<div class="actions">
+			<a href="<?php echo Mage::getUrl('bluecom_shopbybrand/index') ?>"><?php echo $this->__('View all') ?></a>
+		</div>
+    </div>    
+</div>

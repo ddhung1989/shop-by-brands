@@ -49,7 +49,7 @@ class Bluecom_Shopbybrand_Model_Brand extends Mage_Core_Model_Abstract {
 	// "Override" this function to get all product ids that have been having this brand in catalog tables.
 	public function getProductIds() {
 		if (count($this->_productIds) == 0) {
-			//if ($this->getId()) {
+			if ($this->getId()) {
 				$attributeCode = Mage::helper('bluecom_shopbybrand/brand')->getAttributeCode();
 				$optionId = $this->getOptionId();
 				$collection = Mage::getModel('catalog/product')
@@ -57,7 +57,7 @@ class Bluecom_Shopbybrand_Model_Brand extends Mage_Core_Model_Abstract {
 						->addAttributeToSelect('*')
 						->addAttributeToFilter($attributeCode, $optionId);
 				$this->_productIds = $collection->getAllIds();
-			//}
+			}
 		}
 		
 		return $this->_productIds;

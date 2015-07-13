@@ -1,0 +1,19 @@
+<div>
+	<div>
+        <ul>
+            <?php
+            $brandCollection = $this->getBrands();
+            if ($brandCollection->getSize()) {
+				foreach ($brandCollection as $brand) {
+					$url = Mage::getUrl('bluecom_shopbybrand/index/view', array('id'	=> $brand->getId()));
+                    $path = 'brands' . DS . 'image' . DS . $brand->getId();
+					$img = Mage::helper('bluecom_shopbybrand/image')->init($brand, $path)->resize(100, 75);
+                    echo("<li class='diplayimage'><a href='" . $url . "'>" . "<div class='brand-logo'> <img src='$img' /> </div>" . $brand->getName() . "</a></li>");
+                }
+            } else {
+                echo $this->__('Not found any brand!');
+            }
+        ?>
+        </ul>
+    </div>
+</div>

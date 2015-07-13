@@ -22,6 +22,14 @@ class Bluecom_Shopbybrand_Block_Adminhtml_Brand_Edit extends Mage_Adminhtml_Bloc
             function saveAndContinueEdit(){
                 editForm.submit($('edit_form').action + 'back/edit/');
             }
+			
+			if ($('icon').parentNode.childElementCount == 1) {
+				$('icon').addClassName('required-file');
+			}
+			
+			if ($('image').parentNode.childElementCount == 1) {
+				$('image').addClassName('required-file');
+			}
         ";
 	}
 	

@@ -1,6 +1,6 @@
 <?php
 class Bluecom_Shopbybrand_Model_Observer {
-	public function updateBrand($observer) {
+	public function updateBrand($observer) {/*
 		$attributeCode = Mage::helper('bluecom_shopbybrand/brand')->getAttributeCode();
 		$attribute = $observer->getAttribute();
 		
@@ -43,6 +43,32 @@ class Bluecom_Shopbybrand_Model_Observer {
 					}
 				}
 			}
+		}*/
+	}
+	
+	public function addTopMenu($observer) {
+		$parent = new Varien_Data_Tree_Node(array(), 'id', new Varien_Data_Tree());
+		$parent->addData(array(
+					'name'		=> 'Brands',
+					'id'		=> 'brands',
+					'url'		=> Mage::getUrl('bluecom_shopbybrand'),
+					'is_active'	=> false
+				)
+			);
+		
+		$brandCollection = Mage::getModel('bluecom_shopbybrand/brand')->getCollection();
+		foreach ($brandCollection as $brand) {
+			$child = new Varien_Data_Tree_Node(array(), 'id', new Varien_Data_Tree());
+			$child->addData(array(
+						'name'		=> $brand->getName(),
+						'id'		=> 'brands-' . str_replace(' ', '-', $brand->getName()),
+						'url'		=> 	Mage::getUrl('bluecom_shopbybrand/index/view', array('id'	=> $brand->getId())),
+						'is_active'	=> false
+					)
+				);
+			$parent->addChild($child);
 		}
+		
+		$observer->getMenu()->addChild($parent);
 	}
 }

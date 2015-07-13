@@ -1,0 +1,20 @@
+<?php
+	$brand = $this->getBrand();
+	if ($brand->getId()) :
+?>
+<a href="<?php echo Mage::getUrl('bluecom_shopbybrand/index/view', array('id'	=> $brand->getId())); ?>">
+	<?php
+		if ($brand->getImage()) {
+			$path = 'brands' . DS . 'image' . DS . $brand->getId();
+			$img = Mage::helper('bluecom_shopbybrand/image')->init($brand, $path)->resizeImage(60, 40);
+	?>
+			<img src="<?php echo $img; ?>" title="<?php echo $brand->getName(); ?>" />
+	<?php
+		} else {
+	?>
+			
+	<?php
+		}
+	?>
+</a>
+<?php endif; ?>

@@ -1,0 +1,49 @@
+<layout version="0.0.1">
+	<default>
+		<reference name="left_first">
+			<block type="bluecom_shopbybrand/sidebar" name="shopbybrand-sidebar" before="-" template="bluecom/shopbybrand/sidebar.phtml" />
+		</reference>
+	</default>
+	
+	<bluecom_shopbybrand_index_index>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+            </action>
+        </reference>
+		
+        <reference name="content">
+            <block type="bluecom_shopbybrand/index" name="shopbybrand-index" template="bluecom/shopbybrand/index.phtml" />
+        </reference>
+    </bluecom_shopbybrand_index_index>
+	
+	<bluecom_shopbybrand_index_view>
+		<reference name="root">
+            <action method="setTemplate">
+                <template>page/2columns-left.phtml</template>
+            </action>
+        </reference>
+		
+		<reference name="content">
+            <block type="bluecom_shopbybrand/view" name="bluecom_shopbybrand_view" template="bluecom/shopbybrand/view.phtml" >
+                <block type="catalog/product_list" name="product_list"  template="catalog/product/list.phtml">
+                    <block type="catalog/product_list_toolbar" name="product_list_toolbar" template="catalog/product/list/toolbar.phtml">
+						<block type="page/html_pager" name="product_list_toolbar_pager"/>
+					</block>
+                    <action method="setToolbarBlockName"><name>product_list_toolbar</name></action>
+				</block>
+                <action method="setListCollection"/>
+            </block>
+        </reference>
+	</bluecom_shopbybrand_index_view>
+	
+	<catalog_product_view>
+		<reference name="product.info.extrahint">
+			<block type="bluecom_shopbybrand/productinfo" name="shopbybrand_productinfo" template="bluecom/shopbybrand/info.phtml"/>
+		</reference>
+		
+		<reference name="content">
+			<block type="bluecom_shopbybrand/moreproduct" name="shopbybrand_moreproduct" template="catalog/product/list/upsell.phtml" />
+		</reference>
+	</catalog_product_view>
+</layout>

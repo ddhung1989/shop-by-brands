@@ -56,6 +56,38 @@
 		</resources>
 	</global>
 	
+	<frontend>
+		<layout>
+			<updates>
+				<bluecom_shopbybrand>
+					<file>bluecom/shopbybrand.xml</file>
+				</bluecom_shopbybrand>
+			</updates>
+		</layout>
+		
+		<routers>
+			<bluecom_shopbybrand>
+				<use>standard</use>
+				<args>
+					<module>Bluecom_Shopbybrand</module>
+					<frontName>brand</frontName>
+				</args>
+			</bluecom_shopbybrand>
+		</routers>
+		
+		<events>
+			<page_block_html_topmenu_gethtml_before>
+				<observers>
+					<bluecom_shopbybrand_observers_add_top_menu>
+						<type>model</type>
+						<class>Bluecom_Shopbybrand_Model_Observer</class>
+						<method>addTopMenu</method>
+					</bluecom_shopbybrand_observers_add_top_menu>
+				</observers>
+			</page_block_html_topmenu_gethtml_before>
+		</events>
+	</frontend>
+	
 	<admin>
 		<routers>
 			<adminhtml>

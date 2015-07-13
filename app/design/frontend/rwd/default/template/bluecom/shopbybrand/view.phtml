@@ -1,0 +1,18 @@
+<?php
+	$brand = $this->getBrand();
+	$path = Mage::helper('bluecom_shopbybrand')->getUrlImagePath($brand->getId());
+	$img = $path . '/' . $brand->getImage();
+?>
+<div>
+	<img src="<?php echo $img; ?>" />
+	<p><?php echo $brand->getDescription(); ?></p>
+</div>
+<div>
+	<?php
+	try {
+		echo $this->getChildHtml('product_list');
+	} catch (Exception $e) {
+		echo $e->getMessage();
+	}
+	?>
+</div>
