@@ -124,6 +124,26 @@
 					</bluecom_shopbybrand_observers_update_brand>
 				</observers>
 			</catalog_entity_attribute_save_after>
+			
+			<catalog_product_save_before>
+				<observers>
+					<bluecom_shopbybrand_observers_admin_product_save>
+						<type>model</type>
+						<class>Bluecom_ShopbyBrand_Model_Observer</class>
+						<method>saveAdminProduct</method>
+					</bluecom_shopbybrand_observers_admin_product_save>
+				</observers>
+			</catalog_product_save_before>
+			
+			<catalog_product_attribute_update_before>
+				<observers>
+					<bluecom_shopbybrand_observers_admin_product_update_attribute>
+						<type>model</type>
+						<class>Bluecom_Shopbybrand_Model_Observer</class>
+						<method>updateProductsForBrands</method>
+					</bluecom_shopbybrand_observers_admin_product_update_attribute>
+				</observers>
+			</catalog_product_attribute_update_before>
 		</events>
 	</adminhtml>
 </config>

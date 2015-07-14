@@ -39,7 +39,7 @@ class Bluecom_Shopbybrand_Block_Adminhtml_Brand_Edit extends Mage_Adminhtml_Bloc
 	 * @return string
 	 */
 	public function getHeaderText() {
-		if (Mage::registry('bluecom_shopbybrand') && Mage::registry('bluecom_shopbybrand')->getId()) {
+		if (Mage::registry('brand_data') && Mage::registry('brand_data')->getId()) {
 			return $this->__('Edit Brand');
 		} else {
 			return $this->__('New Brand');

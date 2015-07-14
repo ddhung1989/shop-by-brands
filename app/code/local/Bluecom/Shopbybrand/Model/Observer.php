@@ -1,6 +1,6 @@
 <?php
 class Bluecom_Shopbybrand_Model_Observer {
-	public function updateBrand($observer) {/*
+	public function updateBrand($observer) {
 		$attributeCode = Mage::helper('bluecom_shopbybrand/brand')->getAttributeCode();
 		$attribute = $observer->getAttribute();
 		
@@ -43,7 +43,7 @@ class Bluecom_Shopbybrand_Model_Observer {
 					}
 				}
 			}
-		}*/
+		}
 	}
 	
 	public function addTopMenu($observer) {
@@ -70,5 +70,62 @@ class Bluecom_Shopbybrand_Model_Observer {
 		}
 		
 		$observer->getMenu()->addChild($parent);
+	}
+	
+	public function saveAdminProduct($observer) {
+		$product = $observer->getProduct();
+		$productId = $product->getId();
+		$attributeCode = Mage::helper('bluecom_shopbybrand/brand')->getAttributeCode();
+		$optionId = $product->getData($attributeCode);
+		
+		// Update product ids of old brand
+		$oldOptionId = Mage::getModel('catalog/product')->load($productId)->getData($attributeCode);
+		$oldBrand = Mage::getModel('bluecom_shopbybrand/brand')->load($oldOptionId, 'option_id');
+		if ($oldBrand->getId()) {
+			$oldProductIds = implode(',', $oldBrand->getProductIds());
+			
+			$pos = strpos($oldProductIds, $productId);
+			if ($pos == 0) {
+				if ($productId == $oldProductIds) {
+					$oldProductIds = '';
+				} else {
+					$oldProductIds = str_replace($productId . ',', '', $oldProductIds);
+				}
+			} elseif ($pos > 0) {
+				$oldProductIds = str_replace(',' . $productId, '', $oldProductIds);
+			}
+			
+			$oldBrand->setProductIds($oldProductIds)->save();
+		}
+		
+		// Update product ids of new brand
+		$newBrand = Mage::getModel('bluecom_shopbybrand/brand')->load($optionId, 'option_id');
+		if ($newBrand->getId()) {
+			$newProductIds = $newBrand->getProductIds();
+			if ($newProductIds) {
+				$newProductIds = $newProductIds . ',' . $productId;
+			} else {
+				$newProductIds = $productId;
+			}
+			
+			$newBrand->setProductIds($newProductIds)->save();
+		}
+	}
+	
+	public function updateProductsForBrands($observer) {
+		try {
+		$attributesData = $observer->getAttributesData();
+		$productIds = $observer->getProductIds();
+		$attributeCode = Mage::helper('bluecom_shopbybrand/brand')->getAttributeCode();
+		
+		if (count($productIds)) {
+			if (isset($attributesData[$attributeCode])) {
+				$brand = Mage::getModel('bluecom_shopbybrand/brand')->load($attributesData[$attributeCode], 'option_id');
+				Mage::helper('bluecom_shopbybrand/brand')->updateProductsForBrands($productIds, $brand);
+			}
+		}
+		} catch (Exception $e) {
+			echo $e->getMessage(); die();
+		}
 	}
 }
