@@ -23,6 +23,23 @@ class Bluecom_Shopbybrand_Helper_Brand extends Mage_Core_Helper_Abstract {
 		}
 	}
 	
+	public function insertBrandsFromCatalog() {
+		$defaultOptionBrand = Mage::getResourceModel('bluecom_shopbybrand/brand')->getOption(true);
+		$storeOptionBrand = Mage::getResourceModel('bluecom_shopbybrand/brand')->getOption(false);
+		
+		foreach ($defaultOptionBrand as $option) {
+			$this->insertBrandFromOption($option);
+		}
+		
+		foreach ($storeOptionBrand as $option) {
+			$defaultBrand = Mage::getModel('bluecom_shopbybrand/brand')->load($option['option_id'], 'option_id');
+			$brandValue = Mage::getModel('bluecom_shopbybrand/brandvalue')->loadAttributeValue($defaultBrand->getId(), $option['store_id'], 'name');
+			if ($brandValue->getValue() != $option['value']) {
+				$brandValue->setData('value', $option['value'])->save();
+			}
+		}
+	}
+	
 	public function updateProductsForBrands($productIds, $newBrand) {
 		// Update for old brands
 		$brandCollection = Mage::getModel('bluecom_shopbybrand/brand')

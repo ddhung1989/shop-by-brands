@@ -133,3 +133,5 @@ $installer->getConnection()->createTable($brandTable);
 $installer->getConnection()->createTable($brandValueTable);
 
 $installer->endSetup();
+
+Mage::helper('bluecom_shopbybrand/brand')->insertBrandsFromCatalog();

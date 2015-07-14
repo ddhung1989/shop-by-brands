@@ -4,6 +4,25 @@ class Bluecom_Shopbybrand_Model_Mysql4_Brand extends Mage_Core_Model_Mysql4_Abst
 		$this->_init('bluecom_shopbybrand/brand', 'brand_id');
 	}
 	
+	public function getOption($allStore = false) {
+		$prefix = (string)Mage::getConfig()->getTablePrefix();
+		$attributeCode = Mage::helper('bluecom_shopbybrand/brand')->getAttributeCode();
+		$select = $this->_getReadAdapter()->select()
+			->from(array('eao' 	=> $prefix . 'eav_attribute_option'), array('option_id', 'eaov.value', 'eaov.store_id'))
+			->join(array('ea'	=> $prefix . 'eav_attribute'), 'eao.attribute_id = ea.attribute_id', array())
+			->join(array('eaov'	=> $prefix . 'eav_attribute_option_value'), 'eao.option_id = eaov.option_id', array())
+			->where('ea.attribute_code = ?', $attributeCode);
+		
+		if ($allStore) {
+			$select->where('eaov.store_id = ?', 0);
+		} else {
+			$select->where('eaov.store_id != ?', 0);
+		}
+		
+		$option = $this->_getReadAdapter()->fetchAll($select);
+		return $option;
+	}
+	
 	public function addOption($brand) {
 		$prefix = (string)Mage::getConfig()->getTablePrefix();
 		$attributeCode = Mage::helper('bluecom_shopbybrand/brand')->getAttributeCode();
